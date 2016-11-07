@@ -1,0 +1,31 @@
+buildscript {
+	
+	repositories {
+		mavenCentral()
+		maven { url 'http://download.java.net/maven/2' }
+		maven { url 'http://repo.spring.io/plugins-release' }
+	}
+
+	dependencies {
+		classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:0.9.9'
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'tomcat'
+
+repositories {
+	mavenCentral()
+	maven { url 'http://download.java.net/maven/2' }
+	maven { url 'http://repo.spring.io/plugins-release' }
+}
+
+dependencies {
+	compile 'org.springframework:spring-core:4.3.3.RELEASE'
+	compile 'org.springframework:spring-webmvc:4.3.3.RELEASE'
+	compile 'jstl:jstl:1.2'
+	compile 'javax.servlet:javax.servlet-api:3.1.0'
+	compile 'javax:javaee-web-api:7.0'
+	compile 'javax.servlet.jsp:jsp-api:2.2'
+
+}

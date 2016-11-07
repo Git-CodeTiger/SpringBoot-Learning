@@ -1,0 +1,48 @@
+<html>
+	<meta charset="utf-8" />
+	<head>
+		<title>Home</title>
+		<script src="http://cdn.bootcss.com/sockjs-client/1.1.1/sockjs.min.js"></script>
+		<script src="http://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+		<script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<p>聊天室</p>
+
+		<form id="chatForm">
+			<textarea rows="4" cols="60" name="text"></textarea>
+			<input type="submit" />
+		</form>
+	
+		
+		<script th:inline="javascript">
+			$('#chatForm').submit(function(e) {
+				e.preventDefault();
+				var text = $('#chatForm').find('textarea[name="text"]').val();
+				sendSpittle(text);
+			});
+
+			var sock = new SockJS("/endpointChat");/*太坑啦，就因为少个/*/	
+			var stomp = Stomp.over(sock);
+
+			stomp.connect('guest', 'guest', function(frame) {
+				stomp.subscribe("/user/queue/notifications", handleNotification);
+			});
+			
+			function handleNotification(message) {
+				$('#output').append("<b>Received: " + message.body + "</b><br />");
+			}
+			
+			function sendSpittle(text) {
+				stomp.send("/chat", {}, text);
+			}
+			
+			$('#stop').click(function() {
+				sock.close();
+			});
+		</script>
+
+		<div id="output"></div>
+	</body>
+</html>
